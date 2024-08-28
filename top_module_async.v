@@ -49,7 +49,7 @@ module top_module_async #(parameter
 
 
 //Internal Variables
-    wire rst_w, rst_r, wrt_en, red_en, rst_r_mrkgen, rst_r_new;
+    wire rst_w, rst_r, wrt_en, red_en, rst_r_mrkgen, rst_r_new, wrap_A;
     wire [$clog2(depth):0] wptr_gray, rptr_gray, wptr_gray_sync, rptr_gray_sync, wptr, rptr;
     wire [$clog2(depth)-1:0] marker;
     
@@ -59,13 +59,14 @@ module top_module_async #(parameter
     async_rst AR2(reset_r, clk_r, rst_r);
     memory_async M1(wdata, clk_w, clk_r, wrt_en, red_en, wptr[$clog2(depth)-1:0], rptr[$clog2(depth)-1:0], rdata);
     //memory_async M2(wdata, clk_w, wrt_en, red_en, wptr[$clog2(depth)-1:0], rptr[$clog2(depth)-1:0], rdata);
-    wptr_and_full_async WPF1(wrt_enable, rptr_bin_sync, clk_w, rst_w, wptr, wptr_gray, full, wrt_en);
+    wptr_and_full_async WPF1(wrt_enable, rptr_bin_sync, clk_w, rst_w, wrap_A, wptr, wptr_gray, full, wrt_en);
     rptr_and_empty_async RPE1(red_enable, wptr_bin_sync, clk_r, rst_r_new, rptr, rptr_gray, empty, red_en);
-    sync_2ff Sff1(wptr_gray,clk_r,rst_r,wptr_gray_sync);
-    sync_2ff Sff2(rptr_gray,clk_w,rst_w,rptr_gray_sync);
-    gray2bin G2B1(wptr_gray_sync,wptr_bin_sync);
-    gray2bin G2B2(rptr_gray_sync,rptr_bin_sync);
-    marker_gen MRKG1(rst_w,clk_r,wptr,rptr,marker,rst_r_mrkgen,flg);
+    sync_2ff Sff1(wptr_gray, clk_r, rst_r, wptr_gray_sync);
+    sync_2ff Sff2(rptr_gray, clk_w, rst_w, rptr_gray_sync);
+    gray2bin G2B1(wptr_gray_sync, wptr_bin_sync);
+    gray2bin G2B2(rptr_gray_sync, rptr_bin_sync);
+    rst_r_marker MRKG1(rst_w, clk_r, wptr[$clog2(depth)-1:0], rptr[$clog2(depth)-1:0], marker, rst_r_mrkgen, flg);
+    wrap_around_gen WAG1(clk_w, rst_w, alm_full, wrap_A);
     
         
     
