@@ -28,6 +28,7 @@ module wptr_and_full_async #(parameter
     input  [$clog2(depth):0] rptr_bin_sync,
     input  clk_w,
     input  rst_w,
+    input  wrap_A,
     output [$clog2(depth):0] wptr,
     output [$clog2(depth):0] wptr_gray,
     output full,
@@ -35,13 +36,13 @@ module wptr_and_full_async #(parameter
     
     //parameter sz = $clog2(depth);
     wire f;
-    reg [$clog2(depth):0] wp;
+    reg [$clog2(depth)-1:0] wp;
 
     assign full = f;
     assign wrt_en = wrt_enable & (~f);
-    assign wptr = wp;
-    assign wptr_gray = wp^(wp >> 1);
-    assign f = ({~wp[$clog2(depth)],wp[$clog2(depth) - 1:0]} == rptr_bin_sync) ? 1:0;
+    assign wptr = {wrap_A,wp};
+    assign wptr_gray = {wrap_A,wp}^({wrap_A,wp} >> 1);
+    assign f = ({~wrap_A,wp[$clog2(depth) - 1:0]} == rptr_bin_sync) ? 1:0;
 
     always @(posedge clk_w,negedge rst_w) begin
         if(!rst_w) begin
