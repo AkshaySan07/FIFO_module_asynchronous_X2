@@ -1,17 +1,13 @@
-module wrap_around_gen #(
-    
-)(
-    input  [$clog2(depth)-1:0] wptr,
-    input  [$clog2(depth)-1:0] rptr,
+module wrap_around_gen (
     input                      clk_w,
     input                      rst_w,
-    input                      rst_r_gen,
+    input                      alm_full,
     output                     wrap_A_delay);
 
     reg wrap_A_dly;
     wire wrap_A;
 
-    assign wrap_A = (AF==1 && (rptr > wptr)) ? 1:0;
+    assign wrap_A = (alm_full==1) ? 1:0;
 
     always @(posedge clk_w, negedge rst_w) begin
         if(!rst_w) begin
