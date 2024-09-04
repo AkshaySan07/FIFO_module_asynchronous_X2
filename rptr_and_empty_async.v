@@ -36,15 +36,25 @@ module rptr_and_empty_async #(parameter
     //parameter sz = $clog2(depth);
     wire e;
     reg [$clog2(depth)-1:0] rp;
+    reg red_enable1;
+    
+    always @(posedge clk_r, negedge rst_r_gen) begin
+        if(!rst_r_gen) begin
+            red_enable1 <= 1'b0;
+        end
+        else begin
+            red_enable1 <= red_enable;
+        end
+    end
     
     assign empty = e;
-    assign red_en = red_enable & (~e);
-    assign rptr = {0,rp};
-    assign rptr_gray = {0,rp}^({0,rp} >> 1);
-    assign e = ({0,rp} == wptr_bin_sync) ? 1:0;
+    assign red_en = red_enable1 & (~e);
+    assign rptr = {1'b0,rp};
+    assign rptr_gray = {1'b0,rp}^({1'b0,rp} >> 1);
+    assign e = ({1'b0,rp} == wptr_bin_sync) ? 1:0;
 
-    always @(posedge clk_r,negedge rst_r) begin
-        if(!rst_r) begin
+    always @(posedge clk_r,negedge rst_r_gen) begin
+        if(!rst_r_gen) begin
             rp <= 'd0;
         end
         else if(red_en) begin
