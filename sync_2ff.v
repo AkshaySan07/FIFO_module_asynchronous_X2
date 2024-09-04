@@ -21,14 +21,14 @@
 
 
 module sync_2ff #(parameter
-    ptrsize = 10
+    depth = 1024
 )(
-    input  [ptrsize:0] gin,
+    input  [$clog2(depth):0] gin,
     input              clk,
     input              rst,
-    output [ptrsize:0] gout);
+    output [$clog2(depth):0] gout);
 
-    reg [ptrsize:0] r0,r1;
+    reg [$clog2(depth):0] r0,r1;
 
     assign gout = r1;
     

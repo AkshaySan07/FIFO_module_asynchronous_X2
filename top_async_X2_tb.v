@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 08/23/2024 11:38:06 AM
+// Create Date: 28.08.2024 14:49:30
 // Design Name: 
-// Module Name: gray2bin
+// Module Name: top_async_X2_tb
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,18 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module gray2bin #(parameter
-    depth = 1024
-)(
-    input  [$clog2(depth):0] gray,
-    output [$clog2(depth):0] bin);
+module top_async_X2_tb(
 
-    genvar i;
-    generate 
-        for(i=0;i<=$clog2(depth);i=i+1) begin
-            assign bin[i] = ^(gray >> i);
-        end
-    endgenerate
+    );
 endmodule
-
-    
