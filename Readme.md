@@ -18,7 +18,8 @@ top_module instantiates all the submodule of the project.
 
     
 ## Marker design and justification
-![image](https://github.com/user-attachments/assets/4e316043-4104-4ed3-87f8-a339b71872cc)  
+![361236790-4e316043-4104-4ed3-87f8-a339b71872cc](https://github.com/user-attachments/assets/a115f40f-e341-4bc1-96f6-756265a9dfd9)
+
 
 #### Added 2 other ways to clear the marker value.   
 -Maker is cleared when the write overwrites the marker position (ex: if red_enable is always low and the marker is generated at some 105 position and wptr goes to 0 then it starts writing again until full so after it is full wrt_enable is bought low and red_enable becomes high then when the rptr reaches marker it should not be rst as the marker is not relevant after the values until the marker are overwritten by wptr. So as wptr crosses marker the marker becomes 0).  
